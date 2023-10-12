@@ -22,8 +22,15 @@ jobs:
       - name: Replace age variable
         run: |
           age="$(date -d @$( expr $(expr `date +%s` - `date -d 12/25/2003 +%s`) + `date -d 01/01/2000 +%s`) +%y)"
-          sed "s/{{ *age *}}/$age/" "$GITHUB_WORKSPACE/README.md.tpl"
-
+          sed -i "s/{{ *age *}}/$age/" "$GITHUB_WORKSPACE/README.md.tpl"
+          cat "$GITHUB_WORKSPACE/README.md.tpl"
+          
+      - name: Replace next year variable
+        run: |
+          year=`expr $(date +%Y) + 1`
+          sed -i "s/{{ *nextYear *}}/$year/" "$GITHUB_WORKSPACE/README.md.tpl"
+          cat "$GITHUB_WORKSPACE/README.md.tpl"
+          
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
