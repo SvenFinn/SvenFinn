@@ -36,8 +36,8 @@ jobs:
         
       - name: Commit files
         run: |
-          git config --local user.email "fabian.kast.fz2@gmx.de"
-          git config --local user.name "Sven Finn"
+          git config --global user.email "fabian.kast.fz2@gmx.de"
+          git config --global user.name "Sven Finn"
           git add "$GITHUB_WORKSPACE/README.md"
           git commit -m "chore: Update Age and Year"
           git push
