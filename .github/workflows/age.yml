@@ -30,9 +30,18 @@ jobs:
           year=`expr $(date +%Y) + 1`
           sed -i "s/{{ *nextYear *}}/$year/" "$GITHUB_WORKSPACE/README.md.tpl"
           cat "$GITHUB_WORKSPACE/README.md.tpl"
-          
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+
+      - name: Create README.md
+        run: cp "$GITHUB_WORKSPACE/README.md.tpl" "$GITHUB_WORKSPACE/README.md"
+        
+      - name: Commit files
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add "$GITHUB_WORKSPACE/README.md"
+          git commit -m "chore: Update Age and Year"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
