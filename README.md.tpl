@@ -15,4 +15,4 @@ If you want to, you can reach me at:
 - [<img src="images/instagram.png" alt="Instagram:" width="16"/>  @svenfinn](https://www.instagram.com/svenfinn/)
 
 <br><br>
-P.S. If you see this and it's 2024, please remind me to change my age :)
+P.S. If you see this and it's {{ nextYear }}, please remind me to change my age :)
