@@ -8,7 +8,7 @@ I'm currently studying computer science at the DHBW Ravensburg. Working on some 
 If I e2ver decide to publish them, you can see them here :)
 
 If you want to, you can reach me at:
-
+- 
 BTW TESTING
 [![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
 
