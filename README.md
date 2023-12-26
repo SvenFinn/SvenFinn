@@ -1,7 +1,7 @@
 
 ### Hi there 👋
 
-I'm Sven Finn, 19, developing in TypeScript, JavaScript, PHP, ...<br>
+I'm Sven Finn, 20, developing in TypeScript, JavaScript, PHP, ...<br>
 Pretty much most common web languages :)<br>
 I'm currently studying computer science at the DHBW Ravensburg. 
 
