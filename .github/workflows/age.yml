@@ -27,7 +27,7 @@ jobs:
           
       - name: Replace next year variable
         run: |
-          year=`expr $(date +%Y) + 1`
+          year=`expr $(date +%Y) + 2`
           sed -i "s/{{ *nextYear *}}/$year/" "$GITHUB_WORKSPACE/README.md.tpl"
           cat "$GITHUB_WORKSPACE/README.md.tpl"
 
