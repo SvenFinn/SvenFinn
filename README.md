@@ -1,7 +1,7 @@
 
 ### Hi there 👋
 
-I'm Sven Finn, 20, developing in TypeScript, JavaScript, PHP, ...<br>
+I'm Sven Finn, 21, developing in TypeScript, JavaScript, PHP, ...<br>
 Pretty much most common web languages :)<br>
 I'm currently studying computer science at the DHBW Ravensburg. 
 
@@ -15,4 +15,4 @@ If you want to, you can reach me at:
 - [<img src="images/instagram.png" alt="Instagram:" width="16"/>  @svenfinn](https://www.instagram.com/svenfinn/)
 
 <br><br>
-P.S. If you see this and it's 2025, please remind me to change my age :)
+P.S. If you see this and it's 2026, please remind me to change my age :)
