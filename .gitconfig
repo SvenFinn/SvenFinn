@@ -1,0 +1,119 @@
+[diff]
+  mnemonicPrefix = true
+  renames = true
+  submodule = log
+  noprefix = true
+  algorithm = patience
+  # shows whitespace errors in the diff
+  wsErrorHighlight = all
+  ##### Here, you can configure your diff tool (guitool if a gui is available, otherwise the "tool" will be used).
+  # Change this to e.g. vscode
+  tool = vscode
+  # paints moved code in a different color for diffs (uses default->"zebra" instead of "no")
+  colorMoved = default
+[difftool]
+  prompt = false
+[push]
+  default = upstream
+  recurseSubmodules = check
+  autoSetupRemote = true
+[alias]
+  bra = branch -avv
+  ci = commit -v
+  st = status -sb
+  tree = log --graph --oneline --decorate --all --date=format:'%d.%m.%y %H:%M'
+  # %h = commit's hash code
+  # %ad = author date using the --date=format
+  # %d = decoration option (tags, branches, etc.)
+  # %s = subject / commit message
+  # %an = author name
+  t = log --pretty=format:'%C(auto)%h %C(auto,magenta)%ad %C(auto,red)|%C(auto)%d %C(auto,reset)%s %C(auto,dim normal)[%an/%cn]' --decorate --graph --date=format:'%d.%m.%y %H:%M' --all
+  to = log --pretty=format:'%C(auto)%h %C(auto,magenta)%ad %C(auto,red)|%C(auto)%d %C(auto,reset)%s %C(auto,dim normal)[%an/%cn]' --decorate --graph --date=format:'%d.%m.%y %H:%M'
+  dt = difftool
+  mt = mergetool
+  cdiff = diff --color-words
+  mark = "!f() { git tag $1-$(date +\"%d.%m.%Y_%H-%M-%S\"); }; f"
+  zip = "!f() { git archive --format=zip HEAD `git diff master... --name-only`; }; f"
+  fixlfs = "!f() { > .gitattributes && git status && git checkout -- .gitattributes && git status; }; f"
+  du = "!f() { git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | sed -n 's/^blob //p' | sort --numeric-sort --key=2 | cut -c 1-12,41- | $(command -v gnumfmt || echo numfmt) --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest; }; f"
+  # Deletes local branches whose tracking (remote) branch has been deleted - but only if they have been merged already.
+  cleanbranches = "!f() { git fetch -p && for branch in $(LANG=en git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -d $branch; done }; f"
+  # remove local branches that track a remotely deleted branch even if the local branch has not been merged (usually happens if someone remotely rebases and then merges, but you didn't see (i.e. fetch) the rebase before the deletion of the remote branch).
+  forcecleanbranches = "!f() { git fetch -p && for branch in $(LANG=en git branch -vv | grep ': gone]' | awk '{print $1}'); do git branch -D $branch; done }; f"
+  brauthors = "! for branch in $(git branch -r --sort='*authorname' | grep -v HEAD); do git show --format=\"%C(auto)%h %C(auto,magenta)%ad %C(auto,red)|%C(auto,reset) %C(auto,dim normal)[%an] %C(auto)%d %C(auto,reset)%s\" --date=format:'%d.%m.%y %H:%M' --quiet --abbrev-commit $branch; done"
+  # pulls all local branches that are behind their remote tracking branch and merge them --ff-only. Do nothing if they cannot be fast forwarded.
+  # however, this is not well tested. Use with caution.
+  # pulltracked = "! git fetch && git for-each-ref --shell --format='remote=%(upstream:remotename); remote_branch=%(upstream:lstrip=3); local_branch=%(refname:short); tracking_info=%(upstream:trackshort)' 'refs/heads' | while read info; do eval \"$info\"; [[ \"$tracking_info\" == \"<\" ]] && git fetch \"$remote\" \"$local_branch:$remote_branch\"; [[ \"$tracking_info\" == \"=\" ]] && echo -e \"\\e[92m$local_branch\\e[0m is up to date\"; [[ \"$tracking_info\" == \">\" ]] && echo -e \"\\e[93m$local_branch\\e[0m diverged from its tracking branch\"; done"
+  # pc = "! git pulltracked && git cleanbranches"
+  # lists conflicting files during merge/rebase
+  conflicts = diff --name-only --diff-filter=U
+  # This should always be preferred over `push -f`, however, there is no short option for this. Since it's a lot to type -> alias
+  fpush = push --force-with-lease
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = auto
+  pager = true
+[color "status"]
+  branch = yellow
+  header = cyan
+[color "diff"]
+  whitespace = red reverse
+[log]
+  abbrevCommit = true
+  follow = true
+[status]
+  submoduleSummary = true
+  showUntrackedFiles = all
+[tag]
+  #sort = version:refname
+  sort = -taggerdate
+[rebase]
+  # the results of --fork-point are surprising at best, mostly, just confusing. If you really want it, you can still do git rebase --fork-point.
+  forkPoint = false
+[mergetool]
+  keepBackup = false
+[rerere]
+  enabled = true
+[merge]
+  ##### here, you can switch your mergetool to e.g. vscode
+  tool = vscode
+  # this should always be switched on
+  conflictstyle = diff3
+####### configurations of different merge and diff tools - DON'T MAKE CHANGES HERE!
+[mergetool "kdiff3"]
+  path = /usr/bin/kdiff3
+  trustExitCode = false
+[difftool "meld"]
+  cmd = meld "$LOCAL" "$REMOTE"
+[mergetool "meld"]
+  # meld is a bit tricky here:
+  # - The first tab will be filled with the local, base and remote. Meld will try
+  #   to auto merge local and remote into base. Therefore, you won't see $MERGED
+  #   actually in the first tab, but the output (i.e. whatever you write to
+  #   $BASE) will be written to the merged file in the end.
+  # - Since you don't see the merged file (by git) in meld, we open another
+  #   tab, where you can see your local changes compared to base as well as the
+  #   merged one.
+  # - also, there's another tab that displays the base, the remote (containing
+  #   changes compared to base) as well as the merged file from git including the
+  #   conflict markers.
+  cmd = meld --auto-merge "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED" --diff "$BASE" "$LOCAL" "$MERGED" --diff "$BASE" "$REMOTE" "$MERGED"
+[mergetool "vscode"]
+  cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+[user]
+	name = Fabian Kast
+	email = 77897281+SvenFinn@users.noreply.github.com
+[fetch]
+	prune = true
+[core]
+	editor = code --wait
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
